@@ -1,0 +1,126 @@
+<!-- 
+  Arquivo: index.html
+  Alterações:
+    1. Adicionado menu suspenso (dropdown) para seleção de casas ao formulário.
+    2. modificado botão "Cadastrar" no formulário onde o mesmo ativa verificação de senha email e se a campo em branco.
+    3. Adicionado parágrafo para exibir mensagens de erro.
+    4. Adicionado script JavaScript para validações e manipulação do formulário.
+  -->
+
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="./cadastro.css">
+</head>
+
+<body>
+  <h1>Cadastro</h1>
+  <main>
+    <section>
+      <form method="post" action="./index.html"> 
+        <label for="Nome"><b>Nome:</b></label><br>
+        <input type="text" name="Nome" id="Nome"><br><br>
+        <label for="Usuario"><b>Usuario:</b></label><br>
+        <input type="text" name="Usuario" id="Usuario"><br><br>
+        <label for="E-mail"><b>E-mail:</b></label><br>
+        <input type="text" name="E-mail" id="E-mail"><br><br>
+        <label for="Senha"><b>Senha:</b></label><br>
+        <input type="password" name="Senha" id="Senha"><br><br>
+        <label for="ConfirmarSenha"><b>Confirmar Senha:</b></label><br>
+        <input type="password" name="ConfirmarSenha" id="ConfirmarSenha"><br><br>
+        <label for="Casas"><b>Selecione a sua casa:</b></label><br>
+        <select name="Casas" required="required" id="casasDropdown">
+        </select><br><br>   
+        <button type="button" onclick="enviarFormulario()">Cadastrar</button>  
+        <button class="Cancelar">Cancelar</button>
+
+        
+        <p id="mensagemErro" style="color: red;"></p>
+      </form>
+    </section>
+  </main>
+  <footer class="footer">
+    Todos Direitos reservados&copy;
+  </footer>
+
+  <script>
+    function validarSenha(senha) {
+      return senha.length >= 8;
+    }
+  
+    function validarEmail(email) {
+      var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
+    function validarCampo(campo) {
+      var valorCampo = campo.value.trim();
+      if (valorCampo === "") {
+        document.getElementById("mensagemErro").innerText = "Campos em branco, favor preencher todos os campos.";
+        return false;
+      } else {
+        document.getElementById("mensagemErro").innerText = "";
+        return true;
+      }
+    }
+
+    function validarConfirmacaoSenha(senha, confirmasenha) {
+      return senha === confirmasenha;
+    }
+
+    function gerarOpcoesCasas() {
+      var casas = ["Grifinória", "Sonserina", "Corvinal", "Lufa-Lufa"];
+      var dropdown = document.getElementById("casasDropdown");
+
+      for (var i = 0; i < casas.length; i++) {
+        var option = document.createElement("option");
+        option.value = casas[i];
+        option.text = casas[i];
+        dropdown.add(option);
+      }
+    }
+
+    function enviarFormulario() {
+      var Nome = document.getElementById("Nome");
+      var Usuario = document.getElementById('Usuario');
+      var Email = document.getElementById('E-mail');
+      var senha = document.getElementById('Senha');
+      var confirmasenha = document.getElementById('ConfirmarSenha');
+      var mensagemErro = document.getElementById('mensagemErro');
+
+      mensagemErro.innerText = "";
+
+      if (!validarCampo(Nome) || !validarCampo(Usuario) || !validarCampo(Email) || !validarCampo(senha) || !validarCampo(confirmasenha)) {
+        return; 
+      }
+
+      if (!validarEmail(Email.value)) {
+        mensagemErro.innerText = "Formato de e-mail inválido.";
+        return;
+      }
+
+      if (!validarSenha(senha.value)) {
+        mensagemErro.innerText = "A senha deve ter pelo menos 8 caracteres.";
+        return;
+      }
+
+      if (!validarConfirmacaoSenha(senha.value, confirmasenha.value)) {
+        mensagemErro.innerText = "A senha e a confirmação de senha não correspondem.";
+        return;
+      }
+
+      alert("Formulário enviado com sucesso!");
+      window.location.href = "./index.html";
+    }
+
+    gerarOpcoesCasas();
+  </script>
+</body>
+
+</html>
